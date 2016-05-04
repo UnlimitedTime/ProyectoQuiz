@@ -1,0 +1,14 @@
+<form action="/quizzes" method="get">
+	<label for="search">Búsqueda</label>
+	<input id="search" name="search" type="text" placeholder="Inserte aquí tu búsqueda"/>
+	<button type="submit">Buscar</button>
+</form>
+<table>
+	<% for(var i in quizzes){ %>
+		<tr>
+			<td>
+				<a href="/quizzes/<%= quizzes[i].id %>"><%= quizzes[i].question %></a>
+			</td>
+		</tr>
+	<% } %>
+</table>
