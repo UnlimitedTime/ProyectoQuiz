@@ -8,6 +8,9 @@ router.get('/', function(req, res, next) {
   res.render('index');
 });
 
+/* Autoload de rutas que usen :quizId */
+router.param('quizId', quizController.load); //autoload :quizId
+
 /* GET author page*/
 router.get("/author", function(req, res, next){
 	res.render('author');
@@ -16,6 +19,12 @@ router.get("/author", function(req, res, next){
 router.get("/quizzes",  quizController.index);
 router.get("/quizzes/:quizId(\\d+)", quizController.show);
 router.get("/quizzes/:quizId(\\d+)/check", quizController.check);
-
+router.get("/quizzes/new", quizController.new);
+router.post("/quizzes", quizController.create);
+router.get("/quizzes/:quizId(\\d+)/edit", quizController.edit);
+router.put("/quizzes/:quizId(\\d+)", quizController.update);
+router.delete("/quizzes/:quizId(\\d+)", quizController.destroy);
+router.get("/quizzes.:format?", quizController.format);
+router.get("/quizzes/:quizId(\\d+).:format?", quizController.format2);
 
 module.exports = router;

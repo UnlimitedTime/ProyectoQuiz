@@ -1,0 +1,6 @@
+<h3> Formato JSON </h3>
+<% for(var i in quizzes){ %>
+	<p> [ { "id" : <%= quizzes[i].id %>, </p>
+	<p> "question" : "<%= quizzes[i].question %>", </p>
+	<p> "answer" : "<%= quizzes[i].answer %>" } </p>
+<% } %>
