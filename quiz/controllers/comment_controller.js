@@ -23,15 +23,18 @@ exports.new = function(req, res, next){
 
 //POST /quizzes/:quizId/comments
 exports.create = function(req, res, next){
+	var authorId = parseInt(req.session.user.id) || "";
+
 	console.log("Entra create "+ req.body + ", "+ req.body.comment);
 	var comment = models.Comment.build(
 	{
 		text: req.body.comment.text, 
-		QuizId: req.quiz.id
+		QuizId: req.quiz.id,
+		AuthorId: authorId
 	});
 	console.log("Create-comment: " + comment.text + ", " + comment.QuizId);
 
-	comment.save().then(function(comment){
+	comment.save({fields: ["text", "QuizId", "AuthorId"]}).then(function(comment){
 		req.flash('success', 'Comentario creado con éxito.');
 		res.redirect('/quizzes/' + req.quiz.id);
 	}).catch(Sequelize.ValidationError, function(error){

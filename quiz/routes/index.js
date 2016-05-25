@@ -34,7 +34,7 @@ router.get("/author", function(req, res, next){
 router.get("/quizzes", sessionController.expired, quizController.index);
 router.get("/quizzes/:quizId(\\d+)", sessionController.expired, quizController.show);
 router.get("/quizzes/:quizId(\\d+)/check", sessionController.expired, quizController.check);
-router.get("/quizzes/new", sessionController.expired, sessionController.loginRequired, quizController.new);
+router.get("/quizzes/new", sessionController.loginRequired, quizController.new);
 router.post("/quizzes", sessionController.loginRequired, upload.single('image'), quizController.create);
 router.get("/quizzes/:quizId(\\d+)/edit", sessionController.expired, sessionController.loginRequired, quizController.ownershipRequired, quizController.edit);
 router.put("/quizzes/:quizId(\\d+)", sessionController.loginRequired, upload.single('image'), quizController.ownershipRequired, quizController.update);

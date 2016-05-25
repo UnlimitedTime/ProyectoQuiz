@@ -42,6 +42,10 @@ Quiz.belongsTo(User, {as: 'Author', foreignKey: 'AuthorId'});
 Attachment.belongsTo(Quiz);
 Quiz.hasOne(Attachment);
 
+//Relación 1 a N entre User y Comment
+User.hasMany(Comment, {foreignKey: 'AuthorId'});
+Comment.belongsTo(User, {as: 'Author', foreignKey: 'AuthorId'});
+
 // sequelize.sync() crea e inicializa tabla de preguntas en DB
 sequelize.sync().then(function(){ //sync crea la tabla quiz
 	return Quiz.count().then(function(c){

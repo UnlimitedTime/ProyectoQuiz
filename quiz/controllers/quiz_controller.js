@@ -83,16 +83,16 @@ exports.new = function(req, res, next){
 // POST /quizzes/create
 exports.create = function(req, res, next) {
 
-    var redir = req.body.redir || '/quizzes'
+    var redir = req.body.redir || '/quizzes';
 
     var authorId = req.session.user && req.session.user.id || 0;
-    var quiz = { question: req.body.question, 
-                 answer:   req.body.answer,
+    console.log("Pregunta y respuesta capturada: "+ req.body.question + ", "+ req.body.answer);
+    var quiz = { question: req.body.quiz.question, 
+                 answer:   req.body.quiz.answer,
                  AuthorId: authorId };
 
     // Guarda en la tabla Quizzes el nuevo quiz.
-    models.Quiz.create(quiz)
-    .then(function(quiz) {
+    models.Quiz.create(quiz).then(function(quiz){
         req.flash('success', 'Pregunta y Respuesta guardadas con éxito.');
 
         if (!req.file) { 
@@ -101,25 +101,20 @@ exports.create = function(req, res, next) {
         }    
 
         // Salvar la imagen en Cloudinary
-        return uploadResourceToCloudinary(req)
-        .then(function(uploadResult) {
+        return uploadResourceToCloudinary(req).then(function(uploadResult){
             // Crear nuevo attachment en la BBDD.
             return createAttachment(req, uploadResult, quiz);
         });
-    })
-    .then(function() {
+    }).then(function(){
         res.redirect(redir);
-    })
-    .catch(Sequelize.ValidationError, function(error) {
+    }).catch(Sequelize.ValidationError, function(error) {
         req.flash('error', 'Errores en el formulario:');
         for (var i in error.errors) {
             req.flash('error', error.errors[i].value);
         };
-  
         res.render('quizzes/new', {quiz: quiz,
                                    redir: redir});
-    })
-    .catch(function(error) {
+    }).catch(function(error) {
         req.flash('error', 'Error al crear un Quiz: '+error.message);
         next(error);
     }); 
@@ -134,10 +129,12 @@ exports.edit = function(req, res, next){
 // PUT /quizzes/:quizId
 exports.update = function(req, res, next) {
 
-    var redir = req.body.redir || '/quizzes'
+    var redir = req.body.redir || '/quizzes';
 
-    req.quiz.question = req.body.question;
-    req.quiz.answer   = req.body.answer;
+    console.log("Pregunta y respuesta capturada: "+ req.body.question + ", "+ req.body.answer);
+
+    req.quiz.question = req.body.quiz.question;
+    req.quiz.answer   = req.body.quiz.answer;
 
     req.quiz.save({fields: ["question", "answer"]})
     .then(function(quiz) {

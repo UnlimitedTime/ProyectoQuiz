@@ -1,11 +1,11 @@
-<p>
+
     <form method="get" action="/quizzes/<%= quiz.id %>/check">
 		<p>Pregunta: <%= quiz.question %></p>
 
-    <% if(quizzes[i].Attachment){ %>
-          <img src="<%= quizzes[i].Attachment.url %>" width="50px" />
-    <% }else{ %> 
-          <img src="/imgs/question.png" width="50px" />
+    <% if (quiz.Attachment) { %>
+      <img src="<%= quiz.Attachment.url %>" />
+    <% } else { %> 
+      <img src="/imgs/question.png" width="50px" />
     <% } %> 
 
     <p>
@@ -13,7 +13,7 @@
       <input type="submit" value="Comprobar"/>
     </p>
     </form>
-</p>
+
 
 <% if(session.user){ %>
 <p><a href="/quizzes/<%= quiz.id %>/comments/new"><button>Nuevo Comentario</button></a></p>
@@ -24,7 +24,7 @@
 <% for (var i in quiz.Comments) { 
        var comment = quiz.Comments[i];
        if(comment.accepted){ %>
-           <li> <%= comment.text %> </li>
+           <li> <a href="../users/<%= comment.AuthorId %>"><%= comment.AuthorId %></a>: <%= comment.text %> </li>
        <% } else if (session.user && 
                      (session.user.isAdmin || (quiz.AuthorId === session.user.id))) { %>
            <li> <%= comment.text %> </li>
